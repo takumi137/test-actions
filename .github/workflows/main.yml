@@ -1,1 +1,11 @@
+name: Docker Runner Test
 
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: [self-hosted, docker]
+    steps:
+      - run: echo "Hello from Docker Runner"
