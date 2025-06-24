@@ -6,6 +6,6 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, docker]
+    runs-on: [self-hosted, local]
     steps:
       - run: echo "Hello from Docker Runner"
