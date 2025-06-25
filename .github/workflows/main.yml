@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest  # GitHub-hosted runner で動作（Lambda呼び出し用）
 
     steps:
-      - name: 🔼 起動：Fargate Runner
+      - name: 起動：Fargate Runner
         run: |
-          curl -X POST https://YOUR_API_ID.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
+          curl -X POST https://nn8hundfq4.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
             -H "Content-Type: application/json" \
             -d '{"action":"start","runner_name":"fargate-runner"}'
 
@@ -18,7 +18,7 @@ jobs:
     needs: control-runner
     runs-on: [self-hosted, fargate]
     steps:
-      - name: ✅ 実ジョブ（Fargate上）
+      - name:  実ジョブ（Fargate上）
         run: echo "Running on Fargate runner"
 
   cleanup-runner:
@@ -26,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     if: always()  # 成否に関わらず実行
     steps:
-      - name: 🔽 終了：Fargate Runner
+      - name:  終了：Fargate Runner
         run: |
-          curl -X POST https://YOUR_API_ID.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
+          curl -X POST https://nn8hundfq4.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
             -H "Content-Type: application/json" \
             -d '{"action":"stop","runner_name":"fargate-runner"}'
