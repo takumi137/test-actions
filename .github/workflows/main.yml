@@ -1,13 +1,15 @@
-# .github/workflows/test.yml
-name: Test Fargate Runner
+name: Launch Fargate Runner
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
+  workflow_job:
+    types: [queued]
 
 jobs:
-  test:
-    runs-on: [self-hosted, fargate]
+  prepare:
+    runs-on: ubuntu-latest  # Lambda起動のためGitHubのホストで動かす
     steps:
-      - run: echo "Hello from Fargate-based runner"
+      - name: Trigger API Gateway
+        run: |
+          curl -X POST https://{あなたのAPI Gatewayエンドポイント}/webhook \
+            -H "Content-Type: application/json" \
+            -d "{\"workflow_job\": {\"runner_name\": \"fargate-runner\"}}"
