@@ -1,20 +1,13 @@
-name: Test Self-Hosted Runner
+# .github/workflows/test.yml
+name: Test Fargate Runner
 
 on:
-  workflow_dispatch:  # 手動実行できるようにする
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
-  run-on-self-hosted:
+  test:
     runs-on: [self-hosted, fargate]
     steps:
-      - name: ランナー起動確認
-        run: echo "Self-hosted runner on Fargate is working!"
-
-      - name: Git バージョン確認
-        run: git --version
-
-      - name: uname で OS 情報を出力
-        run: uname -a
-
-      - name: ネットワーク接続テスト
-        run: curl -I https://www.google.com
+      - run: echo "Hello from Fargate-based runner"
