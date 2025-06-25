@@ -2,7 +2,7 @@ name: One-shot Fargate Runner Flow
 
 on:
   push:
-
+ 
 jobs:
   control-runner:
     runs-on: ubuntu-latest  # GitHub-hosted runner で動作（Lambda呼び出し用）
