@@ -1,7 +1,7 @@
 name: Launch Fargate Runner
 
 on:
-  workflow_job:
+  workflow_run:
     types: [queued]
 
 jobs:
