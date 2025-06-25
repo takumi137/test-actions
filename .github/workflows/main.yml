@@ -10,6 +10,6 @@ jobs:
     steps:
       - name: Trigger API Gateway
         run: |
-          curl -X POST https://{あなたのAPI Gatewayエンドポイント}/webhook \
+          curl -X POST arn:aws:execute-api:ap-northeast-1:739275465823:nn8hundfq4/*/POST/webhook \
             -H "Content-Type: application/json" \
             -d "{\"workflow_job\": {\"runner_name\": \"fargate-runner\"}}"
