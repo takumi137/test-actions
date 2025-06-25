@@ -1,15 +1,33 @@
-name: Launch Fargate Runner
+name: One-shot Fargate Runner Flow
 
 on:
-  workflow_run:
-    types: [queued]
+  push:
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest  # Lambda起動のためGitHubのホストで動かす
+  control-runner:
+    runs-on: ubuntu-latest  # GitHub-hosted runner で動作（Lambda呼び出し用）
+
     steps:
-      - name: Trigger API Gateway
+      - name: 🔼 起動：Fargate Runner
         run: |
-          curl -X POST arn:aws:execute-api:ap-northeast-1:739275465823:nn8hundfq4/*/POST/webhook \
+          curl -X POST https://YOUR_API_ID.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
             -H "Content-Type: application/json" \
-            -d "{\"workflow_job\": {\"runner_name\": \"fargate-runner\"}}"
+            -d '{"action":"start","runner_name":"fargate-runner"}'
+
+  job-on-fargate:
+    needs: control-runner
+    runs-on: [self-hosted, fargate]
+    steps:
+      - name: ✅ 実ジョブ（Fargate上）
+        run: echo "Running on Fargate runner"
+
+  cleanup-runner:
+    needs: job-on-fargate
+    runs-on: ubuntu-latest
+    if: always()  # 成否に関わらず実行
+    steps:
+      - name: 🔽 終了：Fargate Runner
+        run: |
+          curl -X POST https://YOUR_API_ID.execute-api.ap-northeast-1.amazonaws.com/prod/webhook \
+            -H "Content-Type: application/json" \
+            -d '{"action":"stop","runner_name":"fargate-runner"}'
